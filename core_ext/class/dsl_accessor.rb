@@ -1,3 +1,5 @@
+require 'active_support'
+
 class Class
   def dsl_accessor(name, *args)
     options = args.last.is_a?(Hash) ? args.pop : {}
