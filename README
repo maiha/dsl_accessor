@@ -123,7 +123,7 @@ and it uses @options instance variable with special value :options
 Install
 =======
 
-http://wota.jp/svn/rails/plugins/branches/stable/dsl_accessor/
+ git://github.com/maiha/dsl_accessor.git  
 
 
 Author
