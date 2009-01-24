@@ -1,8 +1,13 @@
 require 'active_support'
 
-class Class
-  def dsl_accessor(name, *args)
+module DslAccessor
+  def dsl_accessor(*args)
     options = args.last.is_a?(Hash) ? args.pop : {}
+
+    # mark auto_declared
+    name = args.shift or
+      return @dsl_accessor_auto_declared = true
+
     options[:default] = args.shift unless args.empty?
 
     case options[:instance]
@@ -69,5 +74,22 @@ class Class
       end
     end
   end
+
+  private
+    def dsl_accessor_auto_declared?
+      !!@dsl_accessor_auto_declared
+    end
+
+    def method_missing(*args, &block)
+      if dsl_accessor_auto_declared? and args.size == 1 and block
+        define_method(*args, &block)
+      else
+        super
+      end
+    end
+
 end
 
+class Class
+  include DslAccessor
+end

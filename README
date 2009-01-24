@@ -126,6 +126,50 @@ Install
  git://github.com/maiha/dsl_accessor.git  
 
 
+Auto declared mode
+==================
+
+Calling dsl_accessor without args enters auto declared mode.
+In this mode, a method missing means instance method creation.
+This affects only methods with a block and no other args.
+
+  class Foo
+    dsl_accessor		# auto declared mode
+      foo{1}      		# define :foo
+      bar(a)			# NoMethodError
+      baz(a){2}			# NoMethodError
+  end
+
+  Foo.new.foo # => 1
+
+This is useful when you have many methods those are one lined methods.
+
+  [without auto delared mode]
+  class Foo
+    def last
+      num_pages
+    end
+
+    def first?
+      page == 1
+    end
+
+    def offset
+      model.proxy_options[:offset]
+    end
+  end
+
+  [with auto delared mode]
+  class Foo
+    dsl_accessor
+      last   {num_pages}
+      first? {page == 1}
+      offset {model.proxy_options[:offset]}
+  end
+
+
+
 Author
 ======
-Maiha <anna@wota.jp>
+Maiha <maiha@wota.jp>
+
