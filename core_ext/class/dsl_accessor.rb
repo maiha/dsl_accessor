@@ -1,4 +1,4 @@
-unless Class.new.respond_to?(:class_inheritable_accessor)
+unless Class.new.respond_to?(:write_inheritable_attribute)
   require File.dirname(__FILE__) + "/../duplicable" unless Object.new.respond_to?(:duplicable?)
   require File.dirname(__FILE__) + "/inheritable_attributes"
 end

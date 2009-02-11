@@ -33,7 +33,7 @@ AUTHOR = "maiha"
 EMAIL = "maiha@wota.jp"
 HOMEPAGE = "http://github.com/maiha/dsl_accessor"
 SUMMARY = "This plugin gives hybrid accessor class methods to classes by DSL like definition"
-GEM_VERSION = "0.3.1"
+GEM_VERSION = "0.3.2"
 
 spec = Gem::Specification.new do |s|
 #  s.rubyforge_project = 'merb'
