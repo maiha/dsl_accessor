@@ -5,7 +5,7 @@ class DslDefaultAccessorTest < Test::Unit::TestCase
 
   class CoolActiveRecord
     dsl_accessor :primary_key, :default=>"id"
-    dsl_accessor :table_name,  :default=>proc{|klass| klass.name.demodulize.underscore.pluralize}
+    dsl_accessor :table_name,  :default=>proc{|klass| klass.name.split(/::/).last.downcase+"s"}
   end
 
   class Item < CoolActiveRecord
@@ -48,7 +48,7 @@ end
 class DslOverwritenDefaultAccessorTest < Test::Unit::TestCase
   class CoolActiveRecord
     dsl_accessor :primary_key, :default=>"id"
-    dsl_accessor :table_name,  :default=>proc{|klass| klass.name.demodulize.underscore.pluralize}
+    dsl_accessor :table_name,  :default=>proc{|klass| klass.name+"s"}
   end
 
   class Item < CoolActiveRecord

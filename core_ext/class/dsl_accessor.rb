@@ -1,4 +1,7 @@
-require 'active_support'
+unless Class.new.respond_to?(:class_inheritable_accessor)
+  require File.dirname(__FILE__) + "/../duplicable" unless Object.new.respond_to?(:duplicable?)
+  require File.dirname(__FILE__) + "/inheritable_attributes"
+end
 
 module DslAccessor
   def dsl_accessor(*args)

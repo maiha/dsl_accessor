@@ -33,7 +33,7 @@ AUTHOR = "maiha"
 EMAIL = "maiha@wota.jp"
 HOMEPAGE = "http://github.com/maiha/dsl_accessor"
 SUMMARY = "This plugin gives hybrid accessor class methods to classes by DSL like definition"
-GEM_VERSION = "0.3.0"
+GEM_VERSION = "0.3.1"
 
 spec = Gem::Specification.new do |s|
 #  s.rubyforge_project = 'merb'
@@ -49,7 +49,6 @@ spec = Gem::Specification.new do |s|
   s.homepage         = HOMEPAGE
   s.require_path     = 'lib'
   s.files            = %w(LICENSE README Rakefile) + Dir.glob("{core_ext,lib,spec,tasks,test}/**/*")
-  s.add_dependency('activesupport', '>= 2.0.0')
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
