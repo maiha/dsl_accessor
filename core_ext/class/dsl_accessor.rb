@@ -1,8 +1,3 @@
-unless Class.new.respond_to?(:write_inheritable_attribute)
-  require File.dirname(__FILE__) + "/../duplicable" unless Object.new.respond_to?(:duplicable?)
-  require File.dirname(__FILE__) + "/inheritable_attributes"
-end
-
 module DslAccessor
   def dsl_accessor(*args)
     options = args.last.is_a?(Hash) ? args.pop : {}
