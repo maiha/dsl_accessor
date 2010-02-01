@@ -1,30 +1,3 @@
-require 'rake'
-require 'rake/testtask'
-require 'rake/rdoctask'
-
-desc 'Default: run unit tests.'
-task :default => :test
-
-desc 'Test the dsl_accessor plugin.'
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
-end
-
-desc 'Generate documentation for the dsl_accessor plugin.'
-Rake::RDocTask.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'DslAccessor'
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README')
-  rdoc.rdoc_files.include('lib/**/*.rb')
-end
-
-
-######################################################################
-### for gem
-
 require 'rubygems'
 require 'rake/gempackagetask'
 
@@ -33,22 +6,24 @@ AUTHOR = "maiha"
 EMAIL = "maiha@wota.jp"
 HOMEPAGE = "http://github.com/maiha/dsl_accessor"
 SUMMARY = "This plugin gives hybrid accessor class methods to classes by DSL like definition"
-GEM_VERSION = "0.3.3"
+GEM_VERSION = "0.4.0"
 
 spec = Gem::Specification.new do |s|
-#  s.rubyforge_project = 'merb'
-  s.name             = GEM_NAME
-  s.version          = GEM_VERSION
-  s.platform         = Gem::Platform::RUBY
-  s.has_rdoc         = true
-  s.extra_rdoc_files = ["README", "LICENSE"]
-  s.summary          = SUMMARY
-  s.description      = s.summary
-  s.author           = AUTHOR
-  s.email            = EMAIL
-  s.homepage         = HOMEPAGE
-  s.require_path     = 'lib'
-  s.files            = %w(LICENSE README Rakefile) + Dir.glob("{core_ext,lib,spec,tasks,test}/**/*")
+  s.rubyforge_project = 'asakusarb'
+  s.executables = []
+  s.name = GEM_NAME
+  s.version = GEM_VERSION
+  s.platform = Gem::Platform::RUBY
+  s.has_rdoc = true
+  s.extra_rdoc_files = ["README", "MIT-LICENSE"]
+  s.summary = SUMMARY
+  s.description = s.summary
+  s.author = AUTHOR
+  s.email = EMAIL
+  s.homepage = HOMEPAGE
+  s.require_path = 'lib'
+  s.add_dependency('optionize', '>= 0.1.0')
+  s.files = %w(MIT-LICENSE README Rakefile) + Dir.glob("{lib,spec,core_ext}/**/*")
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
@@ -72,3 +47,6 @@ task :gemspec do
   end
 end
 
+require 'spec/rake/spectask'
+desc 'Default: run spec examples'
+task :default => 'spec'
