@@ -20,4 +20,16 @@ describe DslAccessor do
     klass.key 'foo'
     klass.key.should == "[foo]"
   end
+
+  it "should call the method when symbol given" do
+    klass = new_class
+
+    klass.dsl_accessor :key, :default=>"foo", :writer=>:labelize
+    def klass.labelize(val)
+      "[#{val}]"
+    end
+
+    klass.key.should == "[foo]"
+  end
+
 end
