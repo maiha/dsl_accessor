@@ -1,7 +1,7 @@
 require "rubygems"
 require "spec"
 
-require File.dirname(__FILE__) + "/../init"
+require File.dirname(__FILE__) + "/../lib/dsl_accessor"
 
 ######################################################################
 ### Helper methods
