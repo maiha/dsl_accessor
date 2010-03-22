@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["maiha"]
-  s.date = %q{2010-02-02}
+  s.date = %q{2010-03-23}
   s.description = %q{This plugin gives hybrid accessor class methods to classes by DSL like definition}
   s.email = %q{maiha@wota.jp}
   s.extra_rdoc_files = ["README", "MIT-LICENSE"]
@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/maiha/dsl_accessor}
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{asakusarb}
-  s.rubygems_version = %q{1.3.5}
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{This plugin gives hybrid accessor class methods to classes by DSL like definition}
 
   if s.respond_to? :specification_version then
