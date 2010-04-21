@@ -1,172 +1,206 @@
 DslAccessor
 ===========
 
-This plugin gives hybrid accessor class methods to classes by DSL like definition,
-here hybrid means getter and setter. The accessor method acts as getter method
-if no argments given, otherwise it acts as setter one with the arguments.
-
-
-Usage
-=====
-
-  class Foo
-    dsl_accessor "<METHOD NAME>"
-  end
-
-
-Example
-=======
-
-  class Foo
-    dsl_accessor :greeting
-  end
-
-This code gives 'greeting' class method to Foo class.
-
-  Foo.greeting                 # means getter, and the default value is nil.
-  => nil
-
-  Foo.greeting "I'm Foo."      # means setter with given arguments
-  => "I'm Foo."
-
-  Foo.greeting
-  => "I'm Foo."
-
-
-Difference
-==========
-
-I'm convinced that you want to propose me to use 'cattr_accessor'.
-Although the difference is just whether we needs '=' operation or not,
-it makes a large different on class definition especially subclass.
-
-  class Foo
-    cattr_accessor :greeting
-  end
-
-  class Bar < Foo
-    self.greeting = "I'm bar."
-  end
-
-We must write redundant code represented by "self." to distinguish
-a local variable and a class method when we use 'cattr_accessor'.
-This is ugly and boring work.
-
-  class Foo
-    dsl_accessor :greeting
-  end
-
-  class Bar < Foo
-    greeting "I'm bar."
-  end
-
-There are no longer redundant prefix code like "self." and "set_".
-Don't you like this dsl-like coding with simple declaration?
-
-
-Special Options
-===============
-
-'dsl_accessor' method can take two options, those are :writer and :default.
-"writer" option means callback method used when setter is executed.
-"default" option means default static value or proc that creates some value.
-
-  class PseudoAR
-    dsl_accessor :primary_key, :default=>"id", :writer=>proc{|value| value.to_s}
-    dsl_accessor :table_name,  :default=>proc{|klass| klass.name.demodulize.underscore.pluralize}
-  end
-
-  class Item < PseudoAR
-  end
-
-  class User < PseudoAR
-    primary_key :user_code
-    table_name  :user_table
-  end
-
-  Item.primary_key  # => "id"
-  Item.table_name   # => "items"
-  User.primary_key  # => "user_code"
-  User.table_name   # => :user_table
-
-Note that "User.primary_key" return a String by setter proc.
-
-
-Instance Method
-===============
-
-"instance" option automatically defines its instance method
-
-  class Search
-    dsl_accessor :url, :instance=>true, :default=>"http://localhost/"
-  end
-
-  Search.url       # => "http://localhost/"
-  Search.new.url   # => "http://localhost/"
-
-and it uses @options instance variable with special value :options
-
-  class Window
-    dsl_accessor :width, :default=>640, :instance=>:options
-    def initialize(options = {})
-      @options = options
-    end
-  end
-
-  Window.width       # => 640
-  Window.new.width   # => 640
-
-  window = Window.new(:width=>320)
-  window.width       # =>320
+  This plugin gives hybrid accessor class methods to classes by DSL like definition,
+  here hybrid means getter and setter. The accessor method acts as getter method
+  if no argments given, otherwise it acts as setter one with the arguments.
 
 
 Install
 =======
 
- git://github.com/maiha/dsl_accessor.git  
+  gem install dsl_accessor
+
+
+Usage
+=====
+
+    class Foo
+      dsl_accessor "<METHOD NAME>" (, default_value)
+    end
+
+
+Example
+=======
+
+    class Foo
+      dsl_accessor :greeting
+    end
+  
+  This code gives 'greeting' class method to Foo class.
+  
+    Foo.greeting                 # means getter, and the default value is nil.
+    => nil
+  
+    Foo.greeting "I'm Foo."      # means setter with given arguments
+    => "I'm Foo."
+  
+    Foo.greeting
+    => "I'm Foo."
+
+
+Difference
+==========
+
+  I am convinced that you want to propose me to use 'cattr_accessor'.
+  Although the difference is just whether we needs '=' operation or not,
+  it makes a large different on class definition especially subclass.
+  
+    class Foo
+      cattr_accessor :greeting
+    end
+  
+    class Bar < Foo
+      self.greeting = "I am bar."
+    end
+  
+  We must write redundant code represented by "self." to distinguish
+  a local variable and a class method when we use 'cattr_accessor'.
+  This is ugly and boring work.
+  
+    class Foo
+      dsl_accessor :greeting
+    end
+  
+    class Bar < Foo
+      greeting "I am bar."
+    end
+  
+  There are no longer redundant prefix code like "self." and "set_".
+  How about this dsl-like coding with simple declaration?
+
+
+Special Options
+===============
+
+  'dsl_accessor' method can take two options, those are :writer and :default.
+  "writer" option means callback method used when setter is executed.
+  "default" option means default static value or proc that creates some value.
+  
+    class PseudoAR
+      dsl_accessor :primary_key, :default=>"id", :writer=>proc{|value| value.to_s}
+      dsl_accessor :table_name,  :default=>proc{|klass| klass.name.demodulize.underscore.pluralize}
+    end
+  
+    class Item < PseudoAR
+    end
+  
+    class User < PseudoAR
+      primary_key :user_code
+      table_name  :user_table
+    end
+  
+    Item.primary_key  # => "id"
+    Item.table_name   # => "items"
+    User.primary_key  # => "user_code"
+    User.table_name   # => :user_table
+  
+  Note that "User.primary_key" return a String by setter proc.
+
+
+Instance Method
+===============
+
+  "instance" option automatically defines its instance method
+  
+    class Search
+      dsl_accessor :url, :instance=>true, :default=>"http://localhost/"
+    end
+  
+    Search.url       # => "http://localhost/"
+    Search.new.url   # => "http://localhost/"
+  
+  and it uses @options instance variable with special value :options
+  
+    class Window
+      dsl_accessor :width, :default=>640, :instance=>:options
+      def initialize(options = {})
+        @options = options
+      end
+    end
+  
+    Window.width       # => 640
+    Window.new.width   # => 640
+  
+    window = Window.new(:width=>320)
+    window.width       # =>320
 
 
 Auto declared mode
 ==================
 
-Calling dsl_accessor without args enters auto declared mode.
-In this mode, a method missing means instance method creation.
-This affects only methods with a block and no other args.
+  It was removed at version 0.4.
+  In 0.4.1 or higher, use dsl_accessor block instead.
 
-  class Foo
-    dsl_accessor		# auto declared mode
-      foo{1}      		# define :foo
-      bar(a)			# NoMethodError
-      baz(a){2}			# NoMethodError
-  end
 
-  Foo.new.foo # => 1
+with block
+==========
 
-This is useful when you have many methods those are one lined methods.
+  dsl_accessor method accepts block for auto declared mode.
+  In this mode, we can define methods like dsl.
 
-  [without auto delared mode]
-  class Foo
-    def last
-      num_pages
+  [NOTE]
+    1. This affects only methods with a block and no other args.
+
+       class Foo
+         dsl_accessor do
+           foo {1}              # Foo.foo is defined
+           bar(a)               # NoMethodError
+           baz(a) {2}           # NoMethodError
+         end
+       end
+
+    2. When :instance is passed with block, it affects instance methods.
+
+       class Foo
+         dsl_accessor :instance do
+           foo {1}              # Foo#foo is defined
+           bar(a)               # NoMethodError (same as class)
+         end
+       end
+
+    3. This will damage on your class cause it easily updates existing methods.
+
+       Foo.name   # => 'Foo'
+       class Foo
+         dsl_accessor do
+           name {1}
+         end
+       end
+       Foo.name   # => 1
+
+
+  Although there is a risk on above, it helps you when many one-lined methods exist.
+  
+    class Foo
+      def last
+        num_pages
+      end
+  
+      def first?
+        page == 1
+      end
+  
+      def offset
+        model.proxy_options[:offset]
+      end
+    end
+  
+  Refactored with dsl_accessor
+
+    class Foo
+      dsl_accessor :instance do
+        last   {num_pages}
+        first? {page == 1}
+        offset {model.proxy_options[:offset]}
+      end
     end
 
-    def first?
-      page == 1
-    end
 
-    def offset
-      model.proxy_options[:offset]
-    end
-  end
+Homepage
+========
 
-  [with auto delared mode]
-  class Foo
-    dsl_accessor
-      last   {num_pages}
-      first? {page == 1}
-      offset {model.proxy_options[:offset]}
-  end
-
+ http://github.com/maiha/dsl_accessor
 
 
 Author

@@ -6,7 +6,7 @@ AUTHOR = "maiha"
 EMAIL = "maiha@wota.jp"
 HOMEPAGE = "http://github.com/maiha/dsl_accessor"
 SUMMARY = "This plugin gives hybrid accessor class methods to classes by DSL like definition"
-GEM_VERSION = "0.4.0"
+GEM_VERSION = "0.4.1"
 
 spec = Gem::Specification.new do |s|
   s.rubyforge_project = 'asakusarb'
@@ -23,6 +23,7 @@ spec = Gem::Specification.new do |s|
   s.homepage = HOMEPAGE
   s.require_path = 'lib'
   s.add_dependency('optionize', '>= 0.1.0')
+  s.add_dependency('blankslate', '>= 2.1.2')
   s.files = %w(MIT-LICENSE README Rakefile) + Dir.glob("{lib,spec,core_ext}/**/*")
 end
 

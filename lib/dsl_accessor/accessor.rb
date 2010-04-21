@@ -32,8 +32,20 @@ module DslAccessor
     opts = Optionize.new(args, :name, :default)
     name = opts.name
 
-    if !name and !block
-      raise "dsl_accessor expects at least one arg"
+    if block
+      case name
+      when :class, NilClass
+        AutoDeclare::DefineClassMethod.new(self, &block)
+      when :instance
+        AutoDeclare::DefineInstanceMethod.new(self, &block)
+      else
+        raise ArgumentError, "dsl_accessor block expects :class or :instance for arg, but got #{name.inspect}"
+      end
+      return
+    end
+
+    if !name
+      raise ArgumentError, "dsl_accessor expects at least one arg"
     end
 
     writer =
