@@ -6,7 +6,6 @@ describe DslAccessor do
   end
 end
 
-
 describe "dsl_accessor(:foo)" do
   before do
     @klass = new_class { dsl_accessor :foo }
@@ -41,7 +40,6 @@ describe "dsl_accessor(:foo)" do
     lambda { @klass.send(:foo=,1,2) }.should raise_error(ArgumentError)
   end
 end
-
 
 describe "dsl_accessor(:foo, 1)" do
   before do
