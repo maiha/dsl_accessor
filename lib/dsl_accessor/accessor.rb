@@ -1,25 +1,37 @@
 require 'optionize'
 
 module DslAccessor
-  def dsl_accessor_reader(key, *args)
+  def dsl_accessor_reader(key, *args, &block)
     key = key.to_s
-    if args.empty?
+    if !args.empty? or block_given?
+      # setter method
+      dsl_accessor_writer(key, *args, &block)
+    else
       # getter method
       if !dsl_accessor_key?(key)
+        # load default value
         default = dsl_accessor_get("#{key}_default")
         value   = default ? default.call : nil
         dsl_accessor_writer(key, value)
       end
       dsl_accessor_get(key)
-    else
-      # setter method
-      dsl_accessor_writer(key, *args)
     end
   end
 
-  def dsl_accessor_writer(key, *args)
+  def dsl_accessor_writer(key, *args, &block)
     case args.size
+    when 0
+      unless block_given?
+        raise ArgumentError, "'#{key}=' expected one argument or block, but nothing passed"
+      end
+      writer = dsl_accessor_get("#{key}_writer")
+      value  = writer ? writer.call(block) : block
+      dsl_accessor_set("#{key}", value)
     when 1
+      if block_given?
+        raise ArgumentError, "'#{key}=' got both arg and block, specify only one of them"
+      end
+
       writer = dsl_accessor_get("#{key}_writer")
       value  = writer ? writer.call(*args) : args.first
       dsl_accessor_set("#{key}", value)
@@ -94,11 +106,11 @@ module DslAccessor
     end
 
     instance_eval <<-EOS
-      def #{name}(*args)
-        dsl_accessor_reader("#{name}", *args)
+      def #{name}(*args, &block)
+        dsl_accessor_reader("#{name}", *args, &block)
       end
-      def #{name}=(*args)
-        dsl_accessor_writer("#{name}", *args)
+      def #{name}=(*args, &block)
+        dsl_accessor_writer("#{name}", *args, &block)
       end
     EOS
   end

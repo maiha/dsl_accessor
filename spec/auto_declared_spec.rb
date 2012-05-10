@@ -55,7 +55,7 @@ describe DslAccessor do
     end
 
     it "should invoke the method in valid context" do
-      mock(Foo).bar { 2 }
+      Foo.should_receive(:bar) { 2 }
       dsl_accessor { foo { bar } }
       Foo.foo.should == 2
     end
@@ -114,7 +114,7 @@ describe DslAccessor do
     end
 
     it "should invoke the method in valid context" do
-      mock.instance_of(Foo).bar { 2 }
+      Foo.any_instance.should_receive(:bar) { 2 }
       dsl_accessor(:instance) { foo { bar } }
       Foo.new.foo.should == 2
     end
