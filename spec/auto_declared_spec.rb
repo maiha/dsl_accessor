@@ -105,12 +105,12 @@ describe DslAccessor do
       Foo.new.foo.should == 'xxx'
     end
 
-    it "should orverwrite existed instance methods even if those are important like 'object_id'" do
+    it "should orverwrite existed instance methods even if those are important like 'id'" do
       Foo.new.object_id.should be_kind_of(Integer)
       Foo.dsl_accessor(:instance) {
-        object_id { 'xxx' }
+        id { 'xxx' }
       }
-      Foo.new.object_id.should == 'xxx'
+      Foo.new.id.should == 'xxx'
     end
 
     it "should invoke the method in valid context" do
