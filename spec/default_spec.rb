@@ -36,4 +36,13 @@ describe DslAccessor do
     k1.dsl_accessor :foo, :default=>proc{1}
     k1.foo.should == 1
   end
+
+  it "should call it in his own context when proc given" do
+    # ensure that no 'name' in this context
+    lambda { name }.should raise_error(NameError)
+
+    k1 = Class.new
+    k1.dsl_accessor :my_name, :default=>proc{self.name}
+    lambda { k1.my_name }.should_not raise_error
+  end
 end
