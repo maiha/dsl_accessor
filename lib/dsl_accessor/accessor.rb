@@ -11,7 +11,7 @@ module DslAccessor
       if !dsl_accessor_key?(key)
         # load default value
         default = dsl_accessor_get("#{key}_default")
-        value   = default ? default.call : nil
+        value   = default ? instance_eval(&default) : nil
         dsl_accessor_writer(key, value)
       end
       dsl_accessor_get(key)
