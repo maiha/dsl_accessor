@@ -2,6 +2,7 @@
 .bundle
 .ruby-version
 Gemfile.lock
+Gemfile.1.9.3.lock
 pkg/*
 tmp/*
 vendor
