@@ -1,5 +1,3 @@
-require 'blankslate'
-
 module DslAccessor
   module AutoDeclare
     class DefineClassMethod < BlankSlate
@@ -36,6 +34,3 @@ module DslAccessor
     end
   end
 end
-
-
-__END__
